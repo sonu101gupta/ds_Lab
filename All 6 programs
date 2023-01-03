@@ -1,0 +1,539 @@
+1 . Implementation of Stack:
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#define ss 3
+int mstack[3],top=-1;
+void push(int ele)
+{
+ if(top == ss-1)
+ {
+ printf("Stack is full\n");
+ return;
+ }
+ top++;
+ mstack[top]=ele;
+ printf("Element pushed inside is %d\n",mstack[top]);
+}
+int pop()
+{
+ if(top == -1)
+ {
+ printf("Stack is empty\n");
+ return -1;
+ }
+ int ele = mstack[top];
+ top--;
+ printf("Element popped is %d\n",ele);
+}
+void size()
+{
+ printf("Size of the stack is %d\n",top+1);
+}
+void display()
+{
+ int i;
+ printf("Elements are:\n");
+ for(i=0;i<=top;i++)
+ {
+ printf("%d",mstack[i]);
+ }
+ printf("\n");
+}
+void main()
+{
+ int choice,ele;
+ printf("1.push 2.pop 3.size 4.display\n");
+ while(1)
+ {
+ printf("Enter your choice:\n");
+ scanf("%d",&choice);
+ switch(choice)
+ {
+ case 1:
+ printf("Enter the element to push into the stack:");
+ scanf("%d",&ele);
+ push(ele);break;
+ case 2:
+ pop(); break;
+ case 3:
+ size();break;
+ case 4:
+ display();break;
+ case 5:
+ exit(0);break;
+ }
+ }
+}
+
+
+
+2 . Implementation of Queue:
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#define qs 5
+int front = -1, rear = -1, queue[qs];
+void enqueue(int ele)
+{
+ if (isFull())
+ printf("Overflow\n");
+ else if (rear == -1 && front == -1)
+ {
+ front = 0;
+ rear = 0;
+ queue[rear] = ele;
+ printf("Element enqueued is %d\n", queue[rear]);
+ }
+ else
+ {
+ rear = rear + 1;
+ queue[rear] = ele;
+ printf("Element enqueued is %d\n", queue[rear]);
+ }
+}
+void dequeue()
+{
+ if (isEmpty())
+ printf("Underflow Condition\n");
+ else if (front == rear)
+ {
+ printf("Element deleted is %d\n", queue[front]);
+ front = -1;
+ rear = -1;
+ }
+ else
+ {
+ int ele = queue[front];
+ front++;
+ printf("Element deleted is %d\n", ele);
+ }
+}
+int isEmpty()
+{
+ if (front == -1 && rear == -1)
+ return 1;
+ else
+ return 0;
+}
+int isFull()
+{
+ if (rear == qs - 1)
+ return 1;
+ else
+ return 0;
+}
+void peek()
+{
+ if (isEmpty())
+ printf("Peek operation cannot be performed\n");
+ else
+ {
+ printf("Peek element is %d\n", queue[front]);
+ }
+}
+void display()
+{
+ int i;
+ if (isEmpty())
+ printf("No element to display\n");
+ printf("Elements are: ");
+ for (i = front; i <= rear; i++)
+ printf("%d ", queue[i]);
+ printf("\n");
+}
+void main()
+{
+ int choice, n;
+ printf("1.Enqueue\n 2.Dequeue\n 3.Peek\n 4.Display\n 5.Exit\n");
+ while (1)
+ {
+ printf("Enter your choice:");
+ scanf("%d", &choice);
+ switch (choice)
+ {
+ case 1:
+ printf("Enter the element to be inserted:");
+ scanf("%d", &n);
+ enqueue(n);
+ break;
+ case 2:
+ dequeue();
+ break;
+ case 3:
+ peek();
+ break;
+ case 4:
+ display();
+ break;
+ case 5:
+ exit(0);
+ break;
+ }
+ }
+}
+
+
+
+
+3.Infix to Postfix:
+
+
+
+
+
+#include<stdio.h>
+#include<string.h>
+//char stack
+char stack[25];
+int top=-1;
+//push elements in the stack
+void push(char item){
+ stack[++top] = item;
+}
+char pop(){
+ return stack[top--];
+}
+char precedence(char ch){
+ switch(ch){
+ case '+' :
+ case '-' :
+ return 2;
+ break;
+ case '/' :
+ case '*' :
+ return 3;
+ break;
+ case '^' :
+ return 4;
+ break;
+
+ case '(':
+ case ')':
+ case '#':
+ return 1;
+ break;
+ default :
+ return 0;
+ }
+}
+int isOperator(char symbol){
+ switch(symbol){
+ case '+':
+ case '-':
+ case '*':
+ case '/':
+ case '^':
+ case '(':
+ case ')':
+ return 1;
+ break;
+
+ default:
+ return 0;
+
+ }
+}
+void convert(char infix[], char postfix[]){
+ int i, symbol, j=0;
+ stack[++top] = '#';
+ for(i=0; i<=strlen(infix); i++){
+ symbol = infix[i];
+ if(isOperator(symbol)==0){
+ postfix[j] = symbol;
+ j++;
+ }
+ else{
+ if(symbol=='('){
+ push(symbol);
+ }
+ else{
+ if(symbol == ')' ){
+ while(stack[top] != '(' ){
+ postfix[j] = pop();
+ j++;
+ }
+ pop();
+ }
+ else{
+ if(precedence(symbol) > precedence(stack[top])){
+ push(symbol);
+ }
+ else{
+ while(precedence(symbol) <= precedence(stack[top])){
+ postfix[j] = pop();
+ j++;
+ }
+ push(symbol);
+ }
+ }
+ }
+ }
+ }
+
+ while(stack[top] != '#'){
+ postfix[j] = pop();
+ j++;
+ }
+ postfix[j] = '\0';
+}
+int main(){
+ char postfix[25];
+ char infix[] = "(a+b)/c+d" ;
+ printf("given infix expression is : %s\n", infix);
+ convert(infix,postfix);
+ printf("postfix exp is : %s\n", postfix);
+}
+
+
+
+
+4 . Infix to Prefix:
+
+
+
+
+
+#include<stdio.h>
+#include<string.h>
+//char stack
+char stack[25];
+int top=-1;
+//push elements in the stack
+void push(char item){
+ stack[++top] = item;
+}
+char pop(){
+ return stack[top--];
+}
+char precedence(char ch){
+ switch(ch){
+ case '+' :
+ case '-' :
+ return 2;
+ break;
+ case '/' :
+ case '*' :
+ return 3;
+ break;
+
+ case '^' :
+ return 4;
+ break;
+
+ case '(':
+ case ')':
+ case '#':
+ return 1;
+ break;
+
+ default :
+ return 0;
+ }
+}
+int isOperator(char symbol){
+ switch(symbol){
+ case '+':
+ case '-':
+ case '*':
+ case '/':
+ case '^':
+ case '(':
+ case ')':
+ return 1;
+ break;
+
+ default:
+ return 0;
+
+ }
+}
+void convert(char infix[], char prefix[]){
+ int i, symbol, j=0;
+ stack[++top] = '#';
+ for(i=0; i<strlen(infix); i++){
+ symbol = infix[i];
+ if(isOperator(symbol)==0){
+ prefix[j] = symbol;
+ j++;
+ }
+ else{
+ if(symbol==')'){
+ push(symbol);
+ }
+ else{
+ if(symbol == '(' ){
+ while(stack[top] != ')' ){
+ prefix[j] = pop();
+ j++;
+ }
+ pop();
+ }
+ else{
+ if(precedence(symbol) >= precedence(stack[top])){
+ push(symbol);
+ }
+ else{
+ while(precedence(symbol) <= precedence(stack[top])){
+ prefix[j] = pop();
+ j++;
+ }
+ push(symbol);
+ }
+ }
+ }
+ }
+ }
+
+ while(stack[top] != '#'){
+ prefix[j] = pop();
+ j++;
+ }
+ prefix[j] = '\0';
+
+}
+void reverse(char infix[]){
+ int i=0, j=strlen(infix)-1;
+ while(i<=j){
+ int temp = infix[i];
+ infix[i] = infix[j];
+ infix[j] = temp;
+ i++;
+ j--;
+ }
+
+}
+int main(){
+ char prefix[25];
+ char infix[] = "(a+b)/c+d";
+ printf("given infix expression is : %s\n", infix);
+ reverse(infix);
+ convert(infix,prefix);
+ reverse(prefix);
+ printf("prefix exp is : %s\n", prefix);
+}
+
+
+
+
+5. Postfix Evaluation:
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+//int stack
+int stack_int[25];
+int top_int = -1;
+void push_int(int item) {
+ stack_int[++top_int] = item;
+}
+char pop_int() {
+ return stack_int[top_int--];
+}
+//evaluates postfix expression
+int evaluate(char *postfix){
+ char ch;
+ int i = 0,operand1,operand2;
+ while( (ch = postfix[i++]) != '\0') {
+
+ if(isdigit(ch)) {
+ push_int(ch-'0'); // Push the operand
+ } else {
+ //Operator,pop two operands
+ operand2 = pop_int();
+ operand1 = pop_int();
+
+ switch(ch) {
+ case '+':
+ push_int(operand1+operand2);
+ break;
+ case '-':
+ push_int(operand1-operand2);
+ break;
+ case '*':
+ push_int(operand1*operand2);
+ break;
+ case '/':
+ push_int(operand1/operand2);
+ break;
+ }
+ }
+ }
+
+ return stack_int[top_int];
+}
+void main() {
+ char postfix[] = "456*+";
+ printf("Evaluated expression is: %d\n" , evaluate(postfix));
+}
+Output and Tracing:
+6. Prefix Evaluation:
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+#define MAX 20
+int stack[MAX],opp1,opp2,top=-1;
+void push(int x)
+ {
+ top++;
+ stack[top]=x;
+ }
+int pop()
+ {
+ char c;
+ c=stack[top];
+ top=top-1;
+ printf("%c",c);
+ }
+int prefixeval()
+{
+ int len;
+ char prefix[20];
+ int res,i;
+ gets(prefix);
+ len=strlen(prefix);
+ for(i=len-1;prefix[i]>=0;i--)
+ {
+ if(isdigit(prefix[i]))
+ {
+ push(prefix[i]-48);
+ }
+ else
+ {
+ opp1=pop();
+ opp2=pop();
+ switch(prefix[i])
+ {
+ case '+':push(opp1+opp2);
+ break;
+ case '-':push(opp1-opp2);
+ break;
+ case '*':push(opp1*opp2);
+ break;
+ case '/':push(opp1/opp2);
+ break;
+ case '^':res=pow(opp1,opp2);
+ push(res);
+ break;
+ }
+ }
+ }
+ printf("result is %d",pop());
+}
+int main()
+{
+ char prefix[20];
+ printf("enter string : ");
+ scanf("%s",prefix);
+ prefixeval(prefix);
+}
